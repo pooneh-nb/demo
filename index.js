@@ -56,8 +56,6 @@ app.post('/registerResponse', (req, res) => {
         return res.status(400).json({ message: 'Invalid challenge' });
     }
 
-    // Here you should verify the attestationObject and save the public key credential
-    // For simplicity, we skip these steps and directly store the credential
     users[username].credential = req.body;
 
     res.json({ message: 'Registration successful' });
