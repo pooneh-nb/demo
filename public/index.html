@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAuthn Registration</title>
+</head>
+<body>
+    <h1>Register with WebAuthn</h1>
+    <form id="registrationForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        <button type="submit">Register</button>
+    </form>
+
+    <script>
+        console.log('-1');
+        document.getElementById('registrationForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            console.log('0');
+            const registerResponse = await fetch('http://localhost:3000/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username })
+            });
+
+            console.log('1');
+
+            if (!registerResponse.ok) {
+                throw new Error(`Server error: ${registerResponse.status} ${registerResponse.statusText}`);
+            }
+            console.log('2');
+
+            const publicKeyCredentialCreationOptions = await registerResponse.json();
+            console.log('3');
+            const credential = await navigator.credentials.create({
+                publicKey: {
+                    ...publicKeyCredentialCreationOptions,
+                    challenge: Uint8Array.from(atob(publicKeyCredentialCreationOptions.challenge), c => c.charCodeAt(0))
+                }
+            });
+            console.log('4');
+            const response = {
+                username,
+                id: credential.id,
+                rawId: base64url.encode(credential.rawId),
+                type: credential.type,
+                response: {
+                    clientDataJSON: base64url.encode(credential.response.clientDataJSON),
+                    attestationObject: base64url.encode(credential.response.attestationObject)
+                }
+            };
+            console.log('5');
+            const registerResponseConfirm = await fetch('http://localhost:3000/registerResponse', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(response)
+            });
+            console.log('6');
+            if (!registerResponseConfirm.ok) {
+                throw new Error(`Server error: ${registerResponseConfirm.status} ${registerResponseConfirm.statusText}`);
+            }
+            console.log('7');
+            const result = await registerResponseConfirm.json();
+            console.log('Registration successful:', result);
+            alert('Registration successful!');
+        });
+
+        console.log('8');
+        // Helper function to encode ArrayBuffer to base64
+        function base64url(arrayBuffer) {
+            return btoa(String.fromCharCode.apply(null, new Uint8Array(arrayBuffer)))
+                .replace(/\+/g, '-')
+                .replace(/\//g, '_')
+                .replace(/=+$/, '');
+        }
+        console.log('end');
+    </script>
+</body>
+</html>
