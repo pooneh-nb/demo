@@ -9,7 +9,7 @@ const PORT = 3000;
 app.use(cors({
     origin: 'http://localhost:8000'
 }));
-
+app.use(express.static('public'))
 app.use(bodyParser.json());
 
 let users = {}; // In-memory user storage
@@ -22,24 +22,26 @@ const generateChallenge = () => {
 // Registration request endpoint
 app.post('/register', (req, res) => {
     const username = req.body.username;
-    const userId = base64url(Buffer.from(username));
+    // const userId = base64url(Buffer.from(username));
+    const userId = Uint8Array.from(username, c => c.charCodeAt(0));
 
     if (users[username]) {
         return res.status(400).json({ message: 'User already exists' });
     }
 
     const challenge = generateChallenge();
+    console.log("Generated Challenge:", challenge);
     users[username] = { id: userId, challenge: challenge };
 
     const publicKeyCredentialCreationOptions = {
-        challenge: challenge,
+        challenge: Uint8Array.from("testchallenge", c => c.charCodeAt(0)),
         rp: { name: 'Example Corp' },
         user: {
             id: userId,
             name: username,
             displayName: username
         },
-        pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
+        pubKeyCredParams: [{alg: -7, type: "public-key"}],
         attestation: 'direct'
     };
 
