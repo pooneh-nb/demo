@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebAuthn Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .login-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            width: 550px;
+            text-align: center;
+            margin-bottom: 20px; 
+        }
+        #message {
+            margin: 20px 0; /* Add margin around the message */
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #103d6e;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .bottom-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .bottom-buttons button {
+            flex: 1;
+            min-width: 270px;
+        }
+        .bottom-buttons #login-button {
+            background-color: #28a745; /* Green */
+        }
+        .bottom-buttons #login-button:hover {
+            background-color: #218838;
+        }
+        .bottom-buttons #logout-button {
+            background-color: #dc3545; /* Red */
+        }
+        .bottom-buttons #logout-button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebAuthn Demo</h1>
+    <div class="container">
+        <form id="register-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <button type="button" id="register-button">Register</button>
+            <button type="button" id="authenticate-button">Authenticate</button>
+        </form>
+    </div>
+    <div id="message"></div>
+    <div class="login-container bottom-buttons">
+        <button id="login-button" onclick="loginButtonClick()">navigator.setStatus('logged-in');</button>
+        <button id="logout-button" onclick="logoutButtonClick()">navigator.setStatus('logged-out');</button>
+    </div>
+   
+    <script>
+        const registerButton = document.getElementById('register-button');
+        const authenticateButton = document.getElementById('authenticate-button');
+        const message = document.getElementById('message');
+
+        registerButton.addEventListener('click', async () => {
+            const username = document.getElementById('username').value;
+
+            try {
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+
+                const publicKeyCredentialCreationOptions = await response.json();
+
+                publicKeyCredentialCreationOptions.challenge = Uint8Array.from(atob(publicKeyCredentialCreationOptions.challenge), c => c.charCodeAt(0));
+                publicKeyCredentialCreationOptions.user.id = Uint8Array.from(atob(publicKeyCredentialCreationOptions.user.id), c => c.charCodeAt(0));
+
+                const credential = await navigator.credentials.create({
+                    publicKey: publicKeyCredentialCreationOptions
+                });
+
+                const credentialResponse = {
+                    id: credential.id,
+                    rawId: Array.from(new Uint8Array(credential.rawId)),
+                    response: {
+                        clientDataJSON: Array.from(new Uint8Array(credential.response.clientDataJSON)),
+                        attestationObject: Array.from(new Uint8Array(credential.response.attestationObject))
+                    },
+                    type: credential.type
+                };
+
+                const registerResponse = await fetch('/registerResponse', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(credentialResponse)
+                });
+
+                if (!registerResponse.ok) {
+                    throw new Error(`Server error: ${registerResponse.status}`);
+                }
+
+                message.textContent = 'Registration successful!';
+            } catch (error) {
+                console.error("Error in registration process:", error);
+                message.textContent = 'Registration failed. Please try again.';
+            }
+        });
+
+        authenticateButton.addEventListener('click', async () => {
+            const username = document.getElementById('username').value;
+
+            // Authentication logic goes here
+            message.textContent = 'Authentication logic not yet implemented';
+        });
+
+        function loginButtonClick() {
+            navigator.setStatus('logged-in');
+            location.reload();
+        }
+
+        function logoutButtonClick() {
+            navigator.setStatus('logged-out');
+            location.reload();
+        }
+    </script>
+</body>
+</html>
