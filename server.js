@@ -22,7 +22,7 @@ const generateChallenge = () => {
 // Registration request endpoint
 app.post('/register', (req, res) => {
     const username = req.body.username;
-    // const userId = base64url(Buffer.from(username));
+    console.log(username);
     const userId = Uint8Array.from(username, c => c.charCodeAt(0));
 
     if (users[username]) {
@@ -30,7 +30,7 @@ app.post('/register', (req, res) => {
     }
 
     const challenge = generateChallenge();
-    console.log("Generated Challenge:", challenge);
+    // console.log("Generated Challenge:", challenge);
     users[username] = { id: userId, challenge: challenge };
 
     const publicKeyCredentialCreationOptions = {
