@@ -104,78 +104,107 @@
     </div>
    
     <script>
-        const registerButton = document.getElementById('register-button');
-        const authenticateButton = document.getElementById('authenticate-button');
+        // const registerButton = document.getElementById('register-button');
+        // const authenticateButton = document.getElementById('authenticate-button');
         const message = document.getElementById('message');
 
-        registerButton.addEventListener('click', async () => {
+        document.getElementById('register-button').addEventListener('click', async function(event) {
+            event.preventDefault();
             const username = document.getElementById('username').value;
 
-            try {
-                const response = await fetch('http://localhost:3000/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username })
-                });
+            const credential = await navigator.credentials.create({
+                publicKey: {
 
-                if (!response.ok) {
-                    throw new Error(`Server error: ${response.status}`);
+                    challenge: Uint8Array.from("fixed challenge", c => c.charCodeAt(0)),
+                    rp: {
+                        name: "test site"
+                    },
+                    user: {
+                        id:  Uint8Array.from("fixed id", c => c.charCodeAt(0)),
+                        name: username,
+                        displayName: username,
+                    },
+                    pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
                 }
+            });
+        });
+        
+
+        document.getElementById('authenticate-button').addEventListener('click', async function(event) {
+            event.preventDefault();
+            navigator.credentials.get({publicKey: {
+                challenge: Uint8Array.from("fixedchallenge", c => c.charCodeAt(0)),
+            }});
+        });
+
+        // registerButton.addEventListener('click', async () => {
+        //     const username = document.getElementById('username').value;
+
+        //     try {
+        //         const response = await fetch('http://localhost:3000/register', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             body: JSON.stringify({ username })
+        //         });
+
+        //         if (!response.ok) {
+        //             throw new Error(`Server error: ${response.status}`);
+        //         }
                 
-                const publicKeyCredentialCreationOptions = await response.json();
+        //         const publicKeyCredentialCreationOptions = await response.json();
 
-                // publicKeyCredentialCreationOptions.challenge = Uint8Array.from(atob(publicKeyCredentialCreationOptions.challenge), c => c.charCodeAt(0));
-                // publicKeyCredentialCreationOptions.user.id = Uint8Array.from(atob(publicKeyCredentialCreationOptions.user.id), c => c.charCodeAt(0));
+        //         // publicKeyCredentialCreationOptions.challenge = Uint8Array.from(atob(publicKeyCredentialCreationOptions.challenge), c => c.charCodeAt(0));
+        //         // publicKeyCredentialCreationOptions.user.id = Uint8Array.from(atob(publicKeyCredentialCreationOptions.user.id), c => c.charCodeAt(0));
 
-                const credential = await navigator.credentials.create({
-                    publicKey: {
-                        challenge: Uint8Array.from(publicKeyCredentialCreationOptions.challenge, c => c.charCodeAt(0)),
-                        rp: publicKeyCredentialCreationOptions.rp,
-                        user: {
-                            id:  Uint8Array.from(publicKeyCredentialCreationOptions.user.id, c => c.charCodeAt(0)),
-                            name: username,
-                            displayName: username
-                       },
-                       pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
-                    }
-                });
+        //         const credential = await navigator.credentials.create({
+        //             publicKey: {
+        //                 challenge: Uint8Array.from(publicKeyCredentialCreationOptions.challenge, c => c.charCodeAt(0)),
+        //                 rp: publicKeyCredentialCreationOptions.rp,
+        //                 user: {
+        //                     id:  Uint8Array.from(publicKeyCredentialCreationOptions.user.id, c => c.charCodeAt(0)),
+        //                     name: username,
+        //                     displayName: username
+        //                },
+        //                pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
+        //             }
+        //         });
 
-                const credentialResponse = {
-                    id: credential.id,
-                    rawId: Array.from(new Uint8Array(credential.rawId)),
-                    response: {
-                        clientDataJSON: Array.from(new Uint8Array(credential.response.clientDataJSON)),
-                        attestationObject: Array.from(new Uint8Array(credential.response.attestationObject))
-                    },
-                    type: credential.type
-                };
+        //         const credentialResponse = {
+        //             id: credential.id,
+        //             rawId: Array.from(new Uint8Array(credential.rawId)),
+        //             response: {
+        //                 clientDataJSON: Array.from(new Uint8Array(credential.response.clientDataJSON)),
+        //                 attestationObject: Array.from(new Uint8Array(credential.response.attestationObject))
+        //             },
+        //             type: credential.type
+        //         };
 
-                const registerResponse = await fetch('http://localhost:3000/registerResponse', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(credentialResponse)
-                });
+        //         const registerResponse = await fetch('http://localhost:3000/registerResponse', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             body: JSON.stringify(credentialResponse)
+        //         });
 
-                if (!registerResponse.ok) {
-                    throw new Error(`Server error: ${registerResponse.status}`);
-                }
+        //         if (!registerResponse.ok) {
+        //             throw new Error(`Server error: ${registerResponse.status}`);
+        //         }
 
-                message.textContent = 'Registration successful!';
-            } catch (error) {
-                console.error("Error in registration process:", error);
-                message.textContent = 'Registration failed. Please try again.';
-            }
-        });
+        //         message.textContent = 'Registration successful!';
+        //     } catch (error) {
+        //         console.error("Error in registration process:", error);
+        //         message.textContent = 'Registration failed. Please try again.';
+        //     }
+        // });
 
-        authenticateButton.addEventListener('click', async () => {
-            const username = document.getElementById('username').value;
+        // authenticateButton.addEventListener('click', async () => {
+        //     const username = document.getElementById('username').value;
 
-            message.textContent = 'Authentication logic not yet implemented';
-        });
+        //     message.textContent = 'Authentication logic not yet implemented';
+        // });
 
         function loginButtonClick() {
             navigator.setStatus('logged-in');
@@ -185,6 +214,13 @@
         function logoutButtonClick() {
             navigator.setStatus('logged-out');
             location.reload();
+        }
+
+        function base64url(arrayBuffer) {
+            return btoa(String.fromCharCode.apply(null, new Uint8Array(arrayBuffer)))
+                .replace(/\+/g, '-')
+                .replace(/\//g, '_')
+                .replace(/=+$/, '');
         }
     </script>
 </body>
