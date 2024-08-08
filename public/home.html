@@ -126,11 +126,20 @@
                 
                 const publicKeyCredentialCreationOptions = await response.json();
 
-                publicKeyCredentialCreationOptions.challenge = Uint8Array.from(atob(publicKeyCredentialCreationOptions.challenge), c => c.charCodeAt(0));
-                publicKeyCredentialCreationOptions.user.id = Uint8Array.from(atob(publicKeyCredentialCreationOptions.user.id), c => c.charCodeAt(0));
+                // publicKeyCredentialCreationOptions.challenge = Uint8Array.from(atob(publicKeyCredentialCreationOptions.challenge), c => c.charCodeAt(0));
+                // publicKeyCredentialCreationOptions.user.id = Uint8Array.from(atob(publicKeyCredentialCreationOptions.user.id), c => c.charCodeAt(0));
 
                 const credential = await navigator.credentials.create({
-                    publicKey: publicKeyCredentialCreationOptions
+                    publicKey: {
+                        challenge: Uint8Array.from(publicKeyCredentialCreationOptions.challenge, c => c.charCodeAt(0)),
+                        rp: publicKeyCredentialCreationOptions.rp,
+                        user: {
+                            id:  Uint8Array.from(publicKeyCredentialCreationOptions.user.id, c => c.charCodeAt(0)),
+                            name: username,
+                            displayName: username
+                       },
+                       pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
+                    }
                 });
 
                 const credentialResponse = {
