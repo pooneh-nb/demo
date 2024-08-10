@@ -12,12 +12,31 @@
     </div>
 
     <h1>Logged In Status API Demo</h1>
+    
     <div class="login-container bottom-buttons">
         <button id="login-button" onclick="loginButtonClick()">navigator.setStatus('logged-in');</button>
         <button id="logout-button" onclick="logoutButtonClick()">navigator.setStatus('logged-out');</button>
     </div>
+
+    <div class="container">
+        <form id="register-form">
+            <label for="username">Username:</label>
+            <input  type="text" id="username" name="username" required>
+            <!-- <button type="button" id="register-button">Register</button> -->
+            <button type="button" id="authenticate-button">Authenticate</button>
+        </form>
+    </div>
+    <div id="message"></div>
    
     <script>
+        const message = document.getElementById('message');
+
+        document.getElementById('authenticate-button').addEventListener('click', async function(event) {
+            event.preventDefault();
+            navigator.credentials.get({publicKey: {
+                challenge: Uint8Array.from("fixedchallenge", c => c.charCodeAt(0)),
+            }});
+        });
 
         function loginButtonClick() {
             navigator.setStatus('logged-in');

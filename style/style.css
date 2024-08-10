@@ -1,0 +1,127 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+h1 {
+    color: #333;
+}
+
+.navbar {
+    width: 100%;
+    background-color: #08415c;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    padding: 10px;
+}
+
+.navbar a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.navbar a:hover {
+    background-color: #007e5d;
+    color: white;
+}
+
+.container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+    margin-top: 100px; /* Adjust margin to fit below the navbar */
+    margin-bottom: 10px;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px; /* Increase space between buttons */
+    margin-top: 20px; /* Margin to separate from message */
+}
+
+#message {
+    margin: 20px 0; /* Add margin around the message */
+    color: #333;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 10px;
+    color: #555;
+}
+
+input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 20px 40px; /* Increase padding for larger buttons */
+    border: none;
+    border-radius: 4px;
+    background-color: #08415c;
+    color: white;
+    font-size: 20px; /* Increase font size */
+    cursor: pointer;
+    width: 100%;
+    max-width: 350px; /* Set a max width to make buttons consistent */
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.bottom-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px; /* Increase space between buttons */
+}
+
+.bottom-buttons button {
+    font-size: 3em;
+    width: 100%;
+    max-width: 800px;
+}
+
+.bottom-buttons #login-button {
+    background-color: #007e5d; /* Green */
+}
+
+.bottom-buttons #login-button:hover {
+    background-color: #218838;
+}
+
+.bottom-buttons #logout-button {
+    background-color: #f1515e; /* Red */
+}
+
+.bottom-buttons #logout-button:hover {
+    background-color: #c82333;
+}

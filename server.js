@@ -24,6 +24,7 @@ let userDatabase = {}; // In-memory user storage
 app.post('/register', (req, res) => {
     try{
         const { username } = req.body;
+        
         const user = {
             id:  base64url(crypto.randomBytes(16)),
             name: username,
@@ -59,6 +60,7 @@ app.post('/registerResponse', (req, res) => {
     try {
         const { id, rawId, response, type } = req.body;
         // Here you should validate and store the user's credential
+        
         if (!userDatabase[id]) {
             throw new Error("User not found");
         }
