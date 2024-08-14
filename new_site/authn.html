@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Logged In Status API Demo</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <div class="overlay">
+        <div class="navbar">
+            <a href="home.html">Home</a>
+            <a href="authn.html">Require Authentication</a>
+        </div>
+        <!-- Authentication Form -->
+        <form>
+            <div class="con">
+                <!-- Start header Content -->
+                <header>
+                    <h2>Login Status API Demo</h2>
+                </header>
+                <!-- End header Content -->
+                <br>
+                <div class="field-set">
+                    <!-- Username Input with Icon -->
+                    <div class="input-container">
+                        <span class="input-item">
+                            <i class="fas fa-user"></i>
+                        </span>
+                        <input class="form-input" id="username" type="text" placeholder="@UserName" required>
+                    </div>
+
+                    <!-- Button Container -->
+                    <div class="button-container">
+                        <!-- Authentication Button -->
+                        <button class="btnapi authentication" id="authenticate-button">Authenticate</button>
+                        <!-- Logout Button -->
+                        <button class="btnapi logout" id="logout-button" onclick="logoutButtonClick()">Log Out</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const message = document.getElementById('message');
+
+        document.getElementById('authenticate-button').addEventListener('click', async function(event) {
+            event.preventDefault();
+            navigator.credentials.get({publicKey: {
+                challenge: Uint8Array.from("fixedchallenge", c => c.charCodeAt(0)),
+            }});
+        });
+
+        function loginButtonClick() {
+            navigator.setStatus('logged-in');
+            location.reload();
+        }
+
+        function logoutButtonClick() {
+            navigator.setStatus('logged-out');
+            location.reload();
+        }
+    </script>
+
+</body>
+
+</html>

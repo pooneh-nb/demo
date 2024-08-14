@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logged In Status API Demo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="overlay">
+        <!-- Navigation Bar -->
+        <div class="navbar">
+            <a href="home.html">Home</a>
+            <a href="authn.html">Require Authentication</a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="con">
+            <header>
+                <h1>Logged In Status API Demo</h1>
+            </header>
+            <div class="home-buttons-container">
+                <button class="login-button" id="login-button" onclick="loginButtonClick()">navigator.setStatus('logged-in');</button>
+                <button class="logout-button" id="logout-button" onclick="logoutButtonClick()">navigator.setStatus('logged-out');</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loginButtonClick() {
+            navigator.setStatus('logged-in');
+            location.reload();
+        }
+
+        function logoutButtonClick() {
+            navigator.setStatus('logged-out');
+            location.reload();
+        }
+    </script>
+</body>
+</html>
