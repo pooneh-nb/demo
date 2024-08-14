@@ -45,19 +45,19 @@
     </div>
 
     <script>
-        const message = document.getElementById('message');
-
         document.getElementById('authenticate-button').addEventListener('click', async function(event) {
             event.preventDefault();
             navigator.credentials.get({publicKey: {
                 challenge: Uint8Array.from("fixedchallenge", c => c.charCodeAt(0)),
             }});
-        });
-
-        function loginButtonClick() {
             navigator.setStatus('logged-in');
             location.reload();
-        }
+        });
+
+        // function loginButtonClick() {
+        //     navigator.setStatus('logged-in');
+        //     location.reload();
+        // }
 
         function logoutButtonClick() {
             navigator.setStatus('logged-out');

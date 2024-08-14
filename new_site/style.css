@@ -156,7 +156,6 @@ input:focus {
 /* Buttons */
 button {
     display: inline-block;
-    color: #252537;
     width: 48%;
     height: 60px;
     padding: 0 20px;
@@ -171,11 +170,18 @@ button {
 }
 
 button.authentication {
-    background-color: #B8F2E6;
+    color: #ffffff;
+    background-color: #196f5d;
 }
 
 button.logout {
-    background-color: #FF6F61;
+    color: #252537;
+    background-color: #feafa7;
+
+    padding: 10px 20px; /* Padding inside the button */
+    border: 1px solid #3f3f3f; /* Coral border */
+    border-radius: 5px; /* Rounded corners, optional */
+    cursor: pointer; /* Change cursor on hover */
 }
 
 /* Button hover effect */
@@ -200,7 +206,6 @@ button:hover {
 
 .home-buttons-container button {
     display: inline-block;
-    color: #252537;
     width: 120%;
     height: 80px;
     padding: 0 20px;
@@ -217,11 +222,18 @@ button:hover {
 }
 
 .home-buttons-container .login-button {
-    background-color: #B8F2E6;
+    color: #ffffff;
+    background-color: #196f5d;
 }
 
 .home-buttons-container .logout-button {
-    background-color: #FF6F61;
+    color: #252537;
+    background-color: #feafa7;
+
+    padding: 10px 20px; /* Padding inside the button */
+    border: 1px solid #3f3f3f; /* Coral border */
+    border-radius: 5px; /* Rounded corners, optional */
+    cursor: pointer; /* Change cursor on hover */
 }
 
 .home-buttons-container button:hover {
