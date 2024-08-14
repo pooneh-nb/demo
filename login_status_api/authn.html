@@ -47,10 +47,10 @@
     <script>
         document.getElementById('authenticate-button').addEventListener('click', async function(event) {
             event.preventDefault();
-            navigator.credentials.get({publicKey: {
+            await navigator.credentials.get({publicKey: {
                 challenge: Uint8Array.from("fixedchallenge", c => c.charCodeAt(0)),
             }});
-            navigator.setStatus('logged-in');
+            await navigator.setStatus('logged-in');
             location.reload();
         });
 
