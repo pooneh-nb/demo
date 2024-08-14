@@ -78,6 +78,7 @@ form {
     min-height: 400px;
     height: auto;
     border-radius: 10px;
+    border: 2px solid #707a7a;
     box-shadow: 0 12px 60px hsla(20, 67%, 75%, 0.31);
     padding: 3%;
     background-image: linear-gradient(-225deg, #E3FDF5 50%, #FFE6FA 50%);
@@ -131,9 +132,15 @@ input[class="form-input"] {
     font-family: 'Abel', sans-serif;
     color: #5E6472;
     outline: none;
-    border: none;
+    border: 2px solid #707a7a;
     border-radius: 0 8px 8px 0;
     transition: 0.2s linear;
+}
+
+input[class="form-input"]:focus {
+    border-color: #FF6F61; /* Change border color on focus */
+    transform: translateX(-1px);
+    border-radius: 8px;
 }
 
 input[id="txt-input"] {
@@ -162,8 +169,10 @@ button {
     background: #fff;
     border-radius: 8px;
     outline: none;
-    border: none;
-    cursor: pointer;
+    padding: 10px 20px; /* Padding inside the button */
+    border: 1px solid #3f3f3f; /* Coral border */
+    border-radius: 5px; /* Rounded corners, optional */
+    cursor: pointer; /* Change cursor on hover */
     text-align: center;
     transition: all 0.2s linear;
     font-size: 1.1rem;
@@ -177,11 +186,6 @@ button.authentication {
 button.logout {
     color: #252537;
     background-color: #feafa7;
-
-    padding: 10px 20px; /* Padding inside the button */
-    border: 1px solid #3f3f3f; /* Coral border */
-    border-radius: 5px; /* Rounded corners, optional */
-    cursor: pointer; /* Change cursor on hover */
 }
 
 /* Button hover effect */
@@ -212,8 +216,10 @@ button:hover {
     background: #fff;
     border-radius: 10px;
     outline: none;
-    border: none;
-    cursor: pointer;
+    padding: 10px 20px; /* Padding inside the button */
+    border: 1px solid #3f3f3f; /* Coral border */
+    border-radius: 5px; /* Rounded corners, optional */
+    cursor: pointer; /* Change cursor on hover */
     text-align: center;
     transition: all 0.2s linear;
     font-size: 2rem;
@@ -229,11 +235,6 @@ button:hover {
 .home-buttons-container .logout-button {
     color: #252537;
     background-color: #feafa7;
-
-    padding: 10px 20px; /* Padding inside the button */
-    border: 1px solid #3f3f3f; /* Coral border */
-    border-radius: 5px; /* Rounded corners, optional */
-    cursor: pointer; /* Change cursor on hover */
 }
 
 .home-buttons-container button:hover {
